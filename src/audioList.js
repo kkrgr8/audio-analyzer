@@ -1,9 +1,8 @@
-    import React, { useState , useEffect} from 'react';
+    import { useState , useEffect} from 'react';
     
     const AudioList = () => {
         const [users, setUsers] = useState([]);
         const [loading, setLoading] = useState(true);
-        const [error, setError] = useState(null);
 
         useEffect(() => {
           fetchUsers();
@@ -54,17 +53,6 @@
               <div className="text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                 <p className="text-gray-600 text-lg">Loading audios...</p>
-              </div>
-            </div>
-          );
-        }
-
-        if (error) {
-          return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-red-500 text-xl mb-4">⚠️</div>
-                <p className="text-gray-600 text-lg">{error}</p>
               </div>
             </div>
           );
