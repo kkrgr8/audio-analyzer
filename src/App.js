@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import AudioUploader from './audioUpload';
 import AudioList from './audioList';
 import './App.css';
