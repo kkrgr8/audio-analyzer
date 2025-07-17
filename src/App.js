@@ -1,5 +1,10 @@
 import AudioUploader from './audioUpload';
 import AudioList from './audioList';
+import AudioBasic from './audioBasic';
+import AudioConversion from './audioConversion';
+import Summary from './audioSummary';
+import TranscriptionProgress from './audioProgress';
+import BasicAudioPlayer from './audioPlayer';
 import './App.css';
 
 const FileUploadManager = () => {
@@ -19,7 +24,11 @@ const FileUploadManager = () => {
 
         {/* Right Side - File Details */}
         <div className="file-details-panel">
-          WOrk In progress ..
+          <div className='audioProgress'><TranscriptionProgress/></div>
+          <div className='audioPlayer'><BasicAudioPlayer/></div>
+          <div className="audioBasic"><AudioBasic/></div>
+          <div className='audioConversion'><AudioConversion/></div>
+          <div className='audioSummary'><Summary/></div>
         </div>
       </div>
     </div>

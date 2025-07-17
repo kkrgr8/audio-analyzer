@@ -143,7 +143,7 @@ code {
 
 /* File List Panel */
 .file-list-panel {
-  width: 33.333%;
+  width: 25%;
   background: rgba(255, 255, 255, 0.8);
   border-right: 1px solid rgba(229, 231, 235, 0.8);
   display: flex;
@@ -533,4 +533,24 @@ code {
 .file-item:focus-within {
   outline: 2px solid #3b82f6;
   outline-offset: -2px;
+}
+
+.audioBasic{
+  float: left;
+  width: 30%;
+  padding: 1%;
+}
+.audioConversion{
+  float: left;
+  width: 70%;
+  padding: 1%;
+}
+.audioProgress{
+  float: right;
+  width: 70%;
+}
+.audioPlayer{
+  float: left;
+  width: 30%;
+  height: 241px;
 }
