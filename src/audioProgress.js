@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
 import { Check, Clock, Play } from 'lucide-react';
 
 const TranscriptionProgress = () => {
-  const [currentStep, setCurrentStep] = useState(2); // Example: currently on step 2 (Transcription)
-  
+  //const [currentStep, setCurrentStep] = useState(2); // Example: currently on step 2 (Transcription)
+  const currentStep = 2 // Example: currently on step 2 (Transcription)
   const steps = [
     'File Uploaded',
     'Transcription Generation',
@@ -26,12 +25,6 @@ const TranscriptionProgress = () => {
       case 'pending': return 'text-gray-500 bg-gray-100 border-gray-300';
       default: return 'text-gray-500 bg-gray-100 border-gray-300';
     }
-  };
-
-  const getConnectorColor = (index) => {
-    if (index < currentStep) return 'bg-green-400';
-    if (index === currentStep) return 'bg-amber-400';
-    return 'bg-gray-300';
   };
 
   const getIcon = (status) => {
