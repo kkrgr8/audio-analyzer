@@ -1,7 +1,9 @@
-import React from 'react';
-
-const AudioConversion = ({ conversationData = [] }) => {
+import {useEffect} from 'react';
+import useAudioStore from './store';
+const AudioConversion = () => {
   // Default sample data if no conversation data provided
+//const conversationData=[];
+const conversationData = useAudioStore(state => state.current_transcript)
   const defaultConversation = [
     {
       speaker: 'Krishna',
@@ -17,29 +19,14 @@ const AudioConversion = ({ conversationData = [] }) => {
       speaker: 'Mike',
       text: 'I have prepared the quarterly report and would like to share some key findings with the team.',
       timestamp: '00:32'
-    },
-    {
-      speaker: 'Krishna',
-      text: 'That sounds great Mike. Please go ahead and share your findings. We\'re all ears.',
-      timestamp: '00:45'
-    },
-    {
-      speaker: 'Sarah',
-      text: 'Before we proceed, should we record this session for future reference?',
-      timestamp: '01:02'
-    },
-    {
-      speaker: 'Mike',
-      text: 'Yes, that would be helpful. Let me start with the sales performance metrics for this quarter.',
-      timestamp: '01:15'
-    }
-  ];
+    }  ];
 
-  const conversation = conversationData.length > 0 ? conversationData : defaultConversation;
+  
+
+  //const conversation = conversationData.length > 0 ? conversationData : defaultConversation;
 
   return (
     <div className="audio-conversion-container">
-      <h2 className="conversion-heading">AUDIO CONVERSION</h2>
       <div className="conversion-info">
         <div className="info-item">
           <span className="info-label">Total Duration:</span>
@@ -47,7 +34,7 @@ const AudioConversion = ({ conversationData = [] }) => {
         </div>
         <div className="info-item">
           <span className="info-label">Speakers Detected:</span>
-          <span className="info-value">{[...new Set(conversation.map(item => item.speaker))].length}</span>
+          <span className="info-value">{[...new Set(conversationData?.map(item => item.speaker))].length}</span>
         </div>
         <div className="info-item">
           <span className="info-label">Conversion Status:</span>
@@ -56,7 +43,7 @@ const AudioConversion = ({ conversationData = [] }) => {
       </div>
       
       <div className="conversation-list">
-        {conversation.map((item, index) => (
+        {conversationData?.map((item, index) => (
           <div key={index} className="conversation-item">
             <div className="speaker-info">
               <span className="speaker-name">{item.speaker}</span>
@@ -75,8 +62,7 @@ const AudioConversion = ({ conversationData = [] }) => {
       <style jsx>{`
         .audio-conversion-container {
           max-width: 100%;
-          height: 510px;
-          margin: 20px auto;
+          height: 586px;
           padding: 20px;
           border: 1px solid #ddd;
           border-radius: 8px;

@@ -1,14 +1,32 @@
+import { useState, useEffect } from 'react';
 import { Check, Clock, Play } from 'lucide-react';
+import useAudioStore from './store';
 
 const TranscriptionProgress = () => {
-  //const [currentStep, setCurrentStep] = useState(2); // Example: currently on step 2 (Transcription)
-  const currentStep = 2 // Example: currently on step 2 (Transcription)
+  const [currentStep, setCurrentStep] = useState(2); // Example: currently on step 2 (Transcription)
+ const defaultDetails = useAudioStore(state => state.current_audio_basic);
+  useEffect(() => {
+    setCurrentStep(progress[defaultDetails.stage]); 
+},[defaultDetails]);
+
+
+  const progress = {
+    'audio.upload' : 2,
+    'transcript.start':2,
+    'transcript.fail':2,
+    'transcript.end':2,
+    'analysis.start':3,
+    'analysis.fail':3,
+    'analysis.end':4,
+    'summary.start':4,
+    'summary.fail':4,
+    'summary.end':4
+  }
+
   const steps = [
-    'File Uploaded',
+    'File Upload',
     'Transcription Generation',
-    'Speaker Recognition',
-    'Intent Identification',
-    'Sentiment Analysis',
+    'Intent & Sentiment Analysis',
     'Summary Generation'
   ];
 
@@ -16,6 +34,7 @@ const TranscriptionProgress = () => {
     if (index < currentStep) return 'completed';
     if (index === currentStep) return 'running';
     return 'pending';
+    
   };
 
   const getStepColor = (status) => {
@@ -38,7 +57,7 @@ const TranscriptionProgress = () => {
 
   return (
     <div className="w-full mx-auto p-4" style={{ width: '100%', marginTop:'7px' }}>
-         <h2 className="conversion-heading">Progress </h2>
+         <h2 className="conversion-heading">Pipeline </h2>
       <div className="bg-white rounded-lg shadow-lg p-6" style={{ height: '150px', width: '100%' }}>
         <div className="flex items-center justify-between h-full relative">
           {/* Connecting line background */}

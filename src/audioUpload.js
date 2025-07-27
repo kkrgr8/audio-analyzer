@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, Send, FileAudio, X, CheckCircle, AlertCircle } from 'lucide-react';
+    import useAudioStore from './store';
+
 
 const AudioUploader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -8,6 +10,7 @@ const AudioUploader = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [error, setError] = useState('');
+    const { addAudio, getAllAudio } = useAudioStore()
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -71,14 +74,14 @@ const AudioUploader = () => {
 
     try {
       const formData = new FormData();
-      formData.append('audio', selectedFile);
+      formData.append('file', selectedFile);
       formData.append('label', label.trim());
       
       // Add any additional fields you might need
       formData.append('filename', selectedFile.name);
       formData.append('filesize', selectedFile.size);
 
-      const response = await fetch('/api/upload-audio', {
+      const response = await fetch('https://hack.purambokku.xyz/api/audios', {
         method: 'POST',
         body: formData,
         // Don't set Content-Type header - let the browser set it with boundary
@@ -89,13 +92,17 @@ const AudioUploader = () => {
       }
 
       const result = await response.json();
+      console.log(result)
+      addAudio([result]);
+      const allAudios = getAllAudio();
+      console.log('All audios via getter:', allAudios);
+
       setUploadStatus('Audio uploaded successfully!');
-      console.log('Upload result:', result);
       
       // Optional: Auto-close modal after successful upload
       setTimeout(() => {
         closeModal();
-      }, 2000);
+      }, 1000);
       
     } catch (err) {
       setError(`Upload failed: ${err.message}`);
@@ -385,7 +392,7 @@ const AudioUploader = () => {
           onMouseLeave={(e) => Object.assign(e.target.style, styles.triggerButton)}
         >
           <Upload style={styles.icon} />
-          Upload Audio File
+          Upload
         </button>
       </div>
 
@@ -396,7 +403,7 @@ const AudioUploader = () => {
           <div style={styles.modal}>
             {/* Modal Header */}
             <div style={styles.modalHeader}>
-              <h2 style={styles.modalTitle}>Upload Audio File</h2>
+              <h2 style={styles.modalTitle}>Upload Recording</h2>
               <button
                 style={styles.closeButton}
                 onClick={closeModal}
@@ -442,7 +449,7 @@ const AudioUploader = () => {
                   >
                     <Upload style={styles.icon} />
                     <span>
-                      {selectedFile ? 'Change Audio File' : 'Choose Audio File'}
+                      {selectedFile ? 'Change File' : 'Choose File'}
                     </span>
                   </label>
                 </div>
@@ -527,7 +534,7 @@ const AudioUploader = () => {
                 ) : (
                   <>
                     <Send style={styles.icon} />
-                    Upload Audio
+                    Upload
                   </>
                 )}
               </button>

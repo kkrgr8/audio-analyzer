@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause } from 'lucide-react';
+import useAudioStore from './store';
 
 const BasicAudioPlayer = () => {
   const audioRef = useRef(null);
@@ -7,9 +8,9 @@ const BasicAudioPlayer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const audioUrl = 'https://hack.purambokku.xyz/api/audiofile/'+ useAudioStore(state => state.current_audio_basic.filename);
+  const defaultDetails = useAudioStore(state => state.current_audio_basic);
 
-  // Sample audio URL for testing
-  const audioUrl = "https://archive.org/download/testmp3testfile/mpthreetest.mp3";
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -71,8 +72,8 @@ const BasicAudioPlayer = () => {
   const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div style={{ height: '235px' }} className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-              <h2 className="audio-details-heading">AUDIO Player</h2>
+    <div style={{ height: '200px' }} className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+              <h2 className="audio-details-heading">Player</h2>
 
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
       
@@ -119,10 +120,8 @@ const BasicAudioPlayer = () => {
 
       {/* Audio Info */}
       <div className="mt-4 text-center">
-        <p className="text-sm text-gray-600">Sample Audio Track</p>
-        <p className="text-xs text-gray-400 mt-1">
-          {isLoading ? 'Loading...' : 'Click progress bar to seek'}
-        </p>
+        <p className="text-sm text-gray-600">{defaultDetails?.label}</p>
+        
       </div>
     </div>
   );

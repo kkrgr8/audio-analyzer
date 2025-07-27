@@ -537,12 +537,17 @@ code {
 
 .audioBasic{
   float: left;
-  width: 30%;
+  width: 30.5%;
   padding: 1%;
 }
 .audioConversion{
   float: left;
-  width: 70%;
+  width: 99%;
+  padding: 1%;
+}
+.audioSummaryConv{
+  float: left;
+  width: 69%;
   padding: 1%;
 }
 .audioProgress{
@@ -552,5 +557,9 @@ code {
 .audioPlayer{
   float: left;
   width: 30%;
-  height: 241px;
+  height: 220px;
+}
+.SecondRow{
+  float: left;
+  width: 99%;
 }

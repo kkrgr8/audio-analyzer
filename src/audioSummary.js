@@ -8,7 +8,7 @@ const Summary = ({ summaryText = "" }) => {
 
   return (
     <div className="summary-container">
-      <h2 className="summary-heading">SUMMARY/INTENT</h2>
+      <h2 className="summary-heading">SUMMARY</h2>
       <div className="summary-content">
         <p className="summary-text">{displayText}</p>
       </div>

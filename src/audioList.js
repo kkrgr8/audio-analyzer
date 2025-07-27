@@ -1,8 +1,15 @@
     import { useState , useEffect} from 'react';
+    import useAudioStore from './store';
+    import StatusSpan from './audioState';
     
-    const AudioList = () => {
-        const [users, setUsers] = useState([]);
+    const AudioList = (props) => {
+     const { addAudio, addCurretnAudio, clearAll, addBasicDetails, addIntent, clearTranscript, addTranscript } = useAudioStore()
+
+      const audioArray = useAudioStore(state => state.audioArray)
         const [loading, setLoading] = useState(true);
+        const handleClick = (a) => {
+        props.isData(a); // Calling the parent function and passing data
+      };
 
         useEffect(() => {
           fetchUsers();
@@ -12,40 +19,85 @@
           try {
             setLoading(true);
             // Mock API call - replace with your actual API endpoint
-            const response = await fetch("/api/audio");
-            if (!response.ok) {
-              throw new Error("Failed to fetch audio");
-            }
-            const data = await response.json();
-            setUsers(data);
+            clearAll();
+            const response = await fetch("https://hack.purambokku.xyz/api/audios").then((res) => res.json())
+            .then((data) => {
+            addAudio(data.audios);
+            });
+           
           } catch (err) {
+            console.log(err,'testing');
             // Mock data for demonstration
             const mockUsers = [
-              { id: 1, name: "Audio 1", duration: '10:01' },
-              { id: 2, name: "Audio 2", duration: '5:34' },
-              
             ];
-            setUsers(mockUsers);
+            if(mockUsers.length!==0){
+              handleClick(true)
+            }
+            //setUsers(mockUsers);
           } finally {
             setLoading(false);
           }
         };
 
-        const handleUserClick = async (userId) => {
+        const handleUserClick = async (audio_id) => {
+          addCurretnAudio(audio_id)
           try {
             // Call API for user details
-            const response = await fetch(`/api/audio/${userId}`);
+            const response = await fetch(`https://hack.purambokku.xyz/api/audios/${audio_id}`);
             if (!response.ok) {
               throw new Error("Failed to fetch audio details");
             }
             const userDetails = await response.json();
+            addBasicDetails(userDetails);
+            addIntent("Positive")
             console.log("Audio details:", userDetails);
+            clearTranscript()
+            fetchTranscriptId(audio_id)
           } catch (err) {
             console.error("Error fetching user details:", err);
             // Mock API call for demonstration
-            console.log(`Fetching details for user ID: ${userId}`);
+            console.log(`Fetching details for user ID: ${audio_id}`);
+          }
+          
+        };
+
+        const fetchTranscriptId = async (current_audio_id) => {
+          try {
+            clearTranscript();
+            // Mock API call - replace with your actual API endpoint
+          
+            const response = await fetch("https://hack.purambokku.xyz/api/transcripts?aid="+current_audio_id).then((res) => res.json())
+            .then((data) => {
+            console.log(data.transcripts[0]);
+            fetchTranscript(data.transcripts[0].transcript_id)
+            });
+            
+           
+          } catch (err) {
+            
+            
+          } finally {
           }
         };
+
+        const fetchTranscript = async (transcript_id) => {
+          try {
+            clearTranscript();
+            // Mock API call - replace with your actual API endpoint
+          
+            const response = await fetch("https://hack.purambokku.xyz/api/transcripts/"+transcript_id).then((res) => res.json())
+            .then((data) => {
+            addTranscript(data?.segments);
+            });
+            
+           
+          } catch (err) {
+            
+            
+          } finally {
+          }
+        };
+
 
         if (loading) {
           return (
@@ -59,33 +111,34 @@
         }
 
         return (
-          <div className="min-h-screen bg-gray-50 py-12 px-4">
-            <div className="max-w-2xl mx-auto">
-              <div className="text-center mb-12">
-                <h6 className="text-4xl font-bold text-gray-900 mb-4">
-                  AUDIO LIST
+          <div className="min-h-screen bg-gray-50">
+            <div className="">
+              <div className="text-center">
+                <h6 className="text-4xl font-bold text-gray-900">
+                  Recordings
                 </h6>
                 
               </div>
 
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                {users.map((user, index) => (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-scroll" style={{ height: '900px' }}>
+                {audioArray[0]?.map((user, index) => (
                   <div
-                    key={user.id}
-                    onClick={() => handleUserClick(user.id)}
+                    key={user.audio_id}
+                    onClick={() => handleUserClick(user.audio_id)}
                     className={`
                                               flex items-center justify-between p-6 cursor-pointer transition-all duration-200
                                               hover:bg-gray-50 hover:shadow-sm active:bg-gray-100
-                                              ${index !== users.length - 1 ? "border-b border-gray-100" : ""}
+                                              ${index !== audioArray.length - 1 ? "border-b border-gray-100" : ""}
                                           `}
                   >
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                        {user.name.charAt(0)}
+                        {user.label.charAt(0)}
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 hover:text-primary transition-colors duration-200">
-                          {user.name}
+                          {user.label} <StatusSpan status={user.stage} />
+
                         </h3>
                         <p className="text-sm text-gray-500">Duration: {user.duration}</p>
                       </div>

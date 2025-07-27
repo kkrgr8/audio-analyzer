@@ -1,35 +1,39 @@
-const AudioBasic = ({ details = {} }) => {
-  // Default sample data if no details provided
-  const defaultDetails = {
-    Name: 'Krishna',
-    Duration: '3:45',
-    Format: 'MP3',
-    Bitrate: '320 kbps',
-    Size: '8.5 MB',
-    Artist: 'Unknown',
-    Album: 'My Collection'
-  };
+import useAudioStore from './store';
 
-  const audioData = Object.keys(details).length > 0 ? details : defaultDetails;
-
+const AudioBasic = () => {
+  const defaultDetails = useAudioStore(state => state.current_audio_basic);
+  const intent = useAudioStore(state => state.cuurent_intent); 
+  
   return (
     <div className="audio-details-container">
-      <h2 className="audio-details-heading">AUDIO DETAILS</h2>
+      <h2 className="audio-details-heading">Recording Details</h2>
       <div className="details-list">
-        {Object.entries(audioData).map(([label, value]) => (
-          <div key={label} className="detail-item">
-            <span className="detail-label">{label}</span>
+        <div className="detail-item">
+            <span className="detail-label">Label</span>
             <span className="detail-separator">:</span>
-            <span className="detail-value">{value}</span>
-          </div>
-        ))}
+            <span className="detail-value">{defaultDetails.label}</span>
+        </div>
+        <div className="detail-item">
+            <span className="detail-label">Duration</span>
+            <span className="detail-separator">:</span>
+            <span className="detail-value">{defaultDetails.duration}</span>
+        </div>
+        <div className="detail-item">
+            <span className="detail-label">Size</span>
+            <span className="detail-separator">:</span>
+            <span className="detail-value">{defaultDetails.size}</span>
+        </div>
+        <div className="detail-item">
+            <span className="detail-label">Intent</span>
+            <span className="detail-separator">:</span>
+            <span className="detail-value">{intent}</span>
+        </div>
+        
       </div>
       
       <style jsx>{`
         .audio-details-container {
           max-width: 400px;
-          margin: 20px auto;
-          margin-top:36px;
           padding: 20px;
           border: 1px solid #ddd;
           border-radius: 8px;
