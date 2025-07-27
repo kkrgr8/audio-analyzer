@@ -6,10 +6,19 @@ const useAudioStore = create((set) => ({
   current_audio_basic:{},
   cuurent_intent:'Good',
   current_transcript:[],
+  current_summary:null,
 
   // Actions
   clearTranscript: () => set((state) => ({
     current_transcript:[]
+  })),
+
+  clearSummary: () => set((state) => ({
+    current_summary:null
+  })),
+
+  addSummary: (summary) => set((state) => ({
+    current_summary:summary
   })),
 
   addTranscript: (transcript) => set((state) => ({

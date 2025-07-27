@@ -3,7 +3,7 @@
     import StatusSpan from './audioState';
     
     const AudioList = (props) => {
-     const { addAudio, addCurretnAudio, clearAll, addBasicDetails, addIntent, clearTranscript, addTranscript } = useAudioStore()
+     const { addAudio, addCurretnAudio, clearSummary, addSummary, clearAll, addBasicDetails, addIntent, clearTranscript, addTranscript } = useAudioStore()
 
       const audioArray = useAudioStore(state => state.audioArray)
         const [loading, setLoading] = useState(true);
@@ -22,6 +22,7 @@
             clearAll();
             const response = await fetch("https://hack.purambokku.xyz/api/audios").then((res) => res.json())
             .then((data) => {
+              console.log(response);
             addAudio(data.audios);
             });
            
@@ -68,8 +69,9 @@
           
             const response = await fetch("https://hack.purambokku.xyz/api/transcripts?aid="+current_audio_id).then((res) => res.json())
             .then((data) => {
-            console.log(data.transcripts[0]);
-            fetchTranscript(data.transcripts[0].transcript_id)
+            console.log(response);
+            fetchTranscript(data.transcripts[0].transcript_id);
+            fetchSummary();
             });
             
            
@@ -83,11 +85,36 @@
         const fetchTranscript = async (transcript_id) => {
           try {
             clearTranscript();
+            // https://hack.purambokku.xyz/api/analysis0801558f827a41be9f1d3b77cad69392
+          
+            // const response = await fetch("https://hack.purambokku.xyz/api/transcripts/"+transcript_id).then((res) => res.json())
+            // .then((data) => {
+            // addTranscript(data?.segments);
+            // });
+
+             const response = await fetch("https://hack.purambokku.xyz/api/analysis0801558f827a41be9f1d3b77cad69392").then((res) => res.json())
+             .then((data) => {
+              console.log(response);
+             addTranscript(data?.segments);
+             });
+            
+           
+          } catch (err) {
+            
+            
+          } finally {
+          }
+        };
+
+        const fetchSummary = async (transcript_id="") => {
+          try {
+            clearSummary();
             // Mock API call - replace with your actual API endpoint
           
-            const response = await fetch("https://hack.purambokku.xyz/api/transcripts/"+transcript_id).then((res) => res.json())
+            const response = await fetch("https://hack.purambokku.xyz/api/summaries7b36913a264343b6b37886121a0cf373").then((res) => res.json())
             .then((data) => {
-            addTranscript(data?.segments);
+              console.log(response);
+            addSummary(data?.summary);
             });
             
            

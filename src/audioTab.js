@@ -27,12 +27,12 @@ export default function TabsComponent() {
               : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
           }`}
         >
-          Tab 2
+          Summary
         </button>
       </div>
 
       {/* Tab Content */}
-      <div className="p-6 h-full overflow-y-auto" style={{ height: 'calc(100% - 60px)' }}>
+      <div className="h-full overflow-y-auto" style={{ height: 'calc(100% - 60px)' }}>
         {activeTab === 'transcript' && (
           <div className="h-full">
             <div className='audioConversion'><AudioConversion/></div>
@@ -41,7 +41,6 @@ export default function TabsComponent() {
 
         {activeTab === 'tab2' && (
           <div className="h-full">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Tab 2 Content</h3>
             <div className='audioSummary'><Summary/></div>
           </div>
         )}

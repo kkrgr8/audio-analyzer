@@ -1,17 +1,14 @@
 import React from 'react';
+import useAudioStore from './store';
 
 const Summary = ({ summaryText = "" }) => {
   // Default summary text if none provided
-  const defaultSummary = `This audio conversion session captured a productive team meeting where Krishna led discussions about project updates and quarterly performance. The conversation involved three main participants: Krishna as the meeting facilitator, Sarah who contributed insights about process improvements, and Mike who presented detailed quarterly report findings. Key topics covered included sales performance metrics, team coordination strategies, and future planning initiatives. The session demonstrated effective communication patterns with clear speaker transitions and collaborative dialogue. All participants actively engaged in the discussion, contributing valuable perspectives on current project status and upcoming milestones. The meeting concluded with actionable items and clear next steps for the team.`;
-
+  const defaultSummary = useAudioStore(state => state.current_summary);
   const displayText = summaryText || defaultSummary;
 
   return (
     <div className="summary-container">
-      <h2 className="summary-heading">SUMMARY</h2>
-      <div className="summary-content">
         <p className="summary-text">{displayText}</p>
-      </div>
       
       <style jsx>{`
         .summary-container {

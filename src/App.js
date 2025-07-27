@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AudioUploader from './audioUpload';
 import AudioList from './audioList';
 import AudioBasic from './audioBasic';
@@ -7,7 +7,6 @@ import BasicAudioPlayer from './audioPlayer';
 import './App.css';
 import WelcomeComponent from './welcome';
 import useAudioStore from './store';
-import Sentiments from './sentiments';
 import TabsComponent from './audioTab';
 import Header from './header'
 
@@ -34,7 +33,7 @@ const FileUploadManager = () => {
         <div className="file-details-panel">
           <div className='audioProgress'><TranscriptionProgress/></div>
           <div className='audioPlayer'><BasicAudioPlayer/></div>
-          <div className='SecondRow'><div className="audioBasic" ><AudioBasic/><Sentiments/></div>
+          <div className='SecondRow'><div className="audioBasic" ><AudioBasic/></div>
           <div className='audioSummaryConv'><TabsComponent/></div></div>
           
           
