@@ -5,12 +5,7 @@ import useAudioStore from './store';
 const TranscriptionProgress = () => {
   const [currentStep, setCurrentStep] = useState(2); // Example: currently on step 2 (Transcription)
  const defaultDetails = useAudioStore(state => state.current_audio_basic);
-  useEffect(() => {
-    setCurrentStep(progress[defaultDetails.stage]); 
-},[defaultDetails,progress]);
-
-
-  const progress = {
+ const progress = {
     'audio.upload' : 2,
     'transcript.start':2,
     'transcript.fail':2,
@@ -22,7 +17,13 @@ const TranscriptionProgress = () => {
     'summary.fail':4,
     'summary.end':4
   }
+ 
+ useEffect(() => {
+    setCurrentStep(progress[defaultDetails.stage]); 
+},[defaultDetails,progress]);
 
+
+  
   const steps = [
     'File Upload',
     'Transcription Generation',
