@@ -7,7 +7,7 @@ const TranscriptionProgress = () => {
  const defaultDetails = useAudioStore(state => state.current_audio_basic);
   useEffect(() => {
     setCurrentStep(progress[defaultDetails.stage]); 
-},[defaultDetails]);
+},[defaultDetails,progress]);
 
 
   const progress = {
