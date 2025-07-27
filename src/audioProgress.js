@@ -1,22 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Check, Clock, Play } from 'lucide-react';
 import useAudioStore from './store';
 
 const TranscriptionProgress = () => {
   const [currentStep, setCurrentStep] = useState(2); // Example: currently on step 2 (Transcription)
  const defaultDetails = useAudioStore(state => state.current_audio_basic);
- const progress = {
-    'audio.upload' : 2,
-    'transcript.start':2,
-    'transcript.fail':2,
-    'transcript.end':2,
-    'analysis.start':3,
-    'analysis.fail':3,
-    'analysis.end':4,
-    'summary.start':4,
-    'summary.fail':4,
-    'summary.end':4
-  }
+ 
+const progress = useMemo(() => ({
+  'audio.upload': 2,
+  'transcript.start': 2,
+  'transcript.fail': 2,
+  'transcript.end': 2,
+  'analysis.start': 3,
+  'analysis.fail': 3,
+  'analysis.end': 4,
+  'summary.start': 4,
+  'summary.fail': 4,
+  'summary.end': 4
+}), []); // Empty dependency since it's static
 
  // eslint-disable-next-line react-hooks/exhaustive-deps
  useEffect(() => {

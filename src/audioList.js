@@ -12,11 +12,7 @@
       };
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-        useEffect(() => {
-          fetchUsers();
-        }, [fetchUsers]);
-
-        const fetchUsers = async () => {
+      const fetchUsers = async () => {
           try {
             setLoading(true);
             // Mock API call - replace with your actual API endpoint
@@ -40,6 +36,11 @@
             setLoading(false);
           }
         };
+        useEffect(() => {
+          fetchUsers();
+        }, [fetchUsers]);
+
+        
 
         const handleUserClick = async (audio_id) => {
           addCurretnAudio(audio_id)
