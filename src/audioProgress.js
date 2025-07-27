@@ -17,7 +17,8 @@ const TranscriptionProgress = () => {
     'summary.fail':4,
     'summary.end':4
   }
- 
+  
+ // eslint-disable-next-line react-hooks/exhaustive-deps
  useEffect(() => {
     setCurrentStep(progress[defaultDetails.stage]); 
 },[defaultDetails]);
