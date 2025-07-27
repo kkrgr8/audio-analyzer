@@ -10,11 +10,11 @@
         const handleClick = (a) => {
         props.isData(a); // Calling the parent function and passing data
       };
-      
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
         useEffect(() => {
           fetchUsers();
-        }, []);
+        }, [fetchUsers]);
 
         const fetchUsers = async () => {
           try {
