@@ -20,7 +20,7 @@ const TranscriptionProgress = () => {
  
  useEffect(() => {
     setCurrentStep(progress[defaultDetails.stage]); 
-},[defaultDetails,progress]);
+},[defaultDetails]);
 
 
   
