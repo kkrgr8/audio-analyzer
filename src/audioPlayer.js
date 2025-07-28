@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause } from 'lucide-react';
 import useAudioStore from './store';
+import API_URL from './constant';
 
 const BasicAudioPlayer = () => {
   const audioRef = useRef(null);
@@ -8,7 +9,7 @@ const BasicAudioPlayer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const audioUrl = 'https://hack.purambokku.xyz/api/audiofile/'+ useAudioStore(state => state.current_audio_basic.filename);
+  const audioUrl = API_URL+'/audiofile/'+ useAudioStore(state => state.current_audio_basic.filename);
   const defaultDetails = useAudioStore(state => state.current_audio_basic);
 
 

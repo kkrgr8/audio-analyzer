@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, Send, FileAudio, X, CheckCircle, AlertCircle } from 'lucide-react';
     import useAudioStore from './store';
-
+import API_URL from './constant';
 
 const AudioUploader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,7 +81,7 @@ const AudioUploader = () => {
       formData.append('filename', selectedFile.name);
       formData.append('filesize', selectedFile.size);
 
-      const response = await fetch('https://hack.purambokku.xyz/api/audios', {
+      const response = await fetch(API_URL+'/audios', {
         method: 'POST',
         body: formData,
         // Don't set Content-Type header - let the browser set it with boundary

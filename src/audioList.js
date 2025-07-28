@@ -1,7 +1,7 @@
     import { useState, useRef, useEffect, useMemo} from 'react';
     import useAudioStore from './store';
     import StatusSpan from './audioState';
-    
+    import API_URL from './constant';
     const AudioList = (props) => {
      const { getCurrentID, updateStep, addAudio, addCurretnAudio, clearSummary, addSummary, clearAll, addBasicDetails, addIntent, clearTranscript, addTranscript } = useAudioStore()
       //const currentStep = useAudioStore(state => state.current_step);
@@ -35,7 +35,7 @@
             setLoading(true);
             // Mock API call - replace with your actual API endpoint
             clearAll();
-            const response = await fetch("https://hack.purambokku.xyz/api/audios").then((res) => res.json())
+            const response = await fetch(API_URL+"/audios").then((res) => res.json())
             .then((data) => {
             addAudio(data.audios);
             });
@@ -83,7 +83,7 @@
   
   try {
     // Call API for user details
-    const response = await fetch(`https://hack.purambokku.xyz/api/audios/${audio_id}`);
+    const response = await fetch(API_URL+`/audios/${audio_id}`);
     if (!response.ok) {
       throw new Error("Failed to fetch audio details");
     }
@@ -126,7 +126,7 @@
             clearTranscript();
             // Mock API call - replace with your actual API endpoint
           
-            const response = await fetch("https://hack.purambokku.xyz/api/transcripts?aid="+current_audio_id).then((res) => res.json())
+            const response = await fetch(API_URL+"/transcripts?aid="+current_audio_id).then((res) => res.json())
             .then((data) => {
             fetchTranscript(current_audio_id,data.transcripts[0].transcript_id,progress);
             fetchSummary(current_audio_id);
@@ -146,7 +146,7 @@
           try {
             clearTranscript();
             if(progress===4 ||progress===5 ){
-              const response = await fetch("https://hack.purambokku.xyz/api/analysis?audio_id="+current_audio_id).then((res) => res.json())
+              const response = await fetch(API_URL+"/analysis?audio_id="+current_audio_id).then((res) => res.json())
               .then((data) => {
               //addTranscript(data?.segments);
               fetchAnalyseData(data.analysis[0]?.analysis_id)
@@ -155,7 +155,7 @@
                 throw new Error("Failed to fetch audio details");
               }
             }else{
-              const response = await fetch("https://hack.purambokku.xyz/api/transcripts/"+transcript_id).then((res) => res.json())
+              const response = await fetch(API_URL+"/transcripts/"+transcript_id).then((res) => res.json())
               .then((data) => {
               addTranscript(data?.segments);
              });
@@ -177,7 +177,7 @@
             //clearSummary();
             // Mock API call - replace with your actual API endpoint
           
-            const response = await fetch("https://hack.purambokku.xyz/api/analysis/"+analyse_id).then((res) => res.json())
+            const response = await fetch(API_URL+"/analysis/"+analyse_id).then((res) => res.json())
             .then((data) => {
             addTranscript(data?.segments);
             });
@@ -196,7 +196,7 @@
             clearSummary();
             // Mock API call - replace with your actual API endpoint
           
-            const response = await fetch("https://hack.purambokku.xyz/api/summaries?audio_id="+current_audio_id).then((res) => res.json())
+            const response = await fetch(API_URL+"/summaries?audio_id="+current_audio_id).then((res) => res.json())
             .then((data) => {
             addSummary(data?.summaries[0]?.summary);
             });
