@@ -1,16 +1,16 @@
+import React, { useState } from 'react';
 import useAudioStore from './store';
 
 const SentimentPieChart = () => {
 
 const data = useAudioStore(state => state.current_transcript)
+   const [hoveredSegment, setHoveredSegment] = useState(null);
   // Process the data to count sentiments
   const sentimentCounts = data.reduce((acc, item) => {
     const sentiment = item.sentiment.label;
     acc[sentiment] = (acc[sentiment] || 0) + 1;
     return acc;
   }, {});
-
-
 
   // Define colors for each sentiment
   const colors = {
@@ -71,8 +71,8 @@ const data = useAudioStore(state => state.current_transcript)
   });
 
   return (
-    <div className="mt-6 w-[270px] h-[250px] bg-gray-100 border border-gray-300 rounded-lg flex flex-col items-center justify-center p-4">
-      <h2 className="text-lg font-semibold mb-3 text-gray-800 mt-3">Sentiment Graph</h2>
+    <div className="mt-5 w-[100%] h-[300px] bg-gray-100 border border-gray-300 rounded-lg flex flex-col items-center justify-center p-4">
+      <h2 className="text-lg font-semibold mb-3 text-gray-800">Sentiment Graph</h2>
       
       <div className="relative">
         <svg width="220" height="220" className="transform rotate-0">
@@ -83,16 +83,28 @@ const data = useAudioStore(state => state.current_transcript)
               fill={segment.color}
               stroke="white"
               strokeWidth="2"
-              className="hover:opacity-80 transition-opacity duration-200"
+              className="hover:opacity-80 transition-opacity duration-200 cursor-pointer"
+              onMouseEnter={() => setHoveredSegment(segment)}
+              onMouseLeave={() => setHoveredSegment(null)}
             />
           ))}
         </svg>
         
-        {/* Center text showing total */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        {/* Center text showing total or hovered segment */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-center">
-            <div className="text-xl font-bold text-gray-800">{total}</div>
-            <div className="text-sm text-gray-600">Total</div>
+            {hoveredSegment ? (
+              <>
+                <div className="text-xl font-bold text-gray-800">{hoveredSegment.count}</div>
+                <div className="text-sm text-gray-600">{hoveredSegment.sentiment}</div>
+                <div className="text-xs text-gray-500">({hoveredSegment.percentage.toFixed(1)}%)</div>
+              </>
+            ) : (
+              <>
+                <div className="text-xl font-bold text-gray-800">{total}</div>
+                <div className="text-sm text-gray-600">Total</div>
+              </>
+            )}
           </div>
         </div>
       </div>

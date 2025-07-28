@@ -1,6 +1,5 @@
     import { useState, useRef, useEffect, useMemo} from 'react';
     import useAudioStore from './store';
-    import StatusSpan from './audioState';
     import API_URL from './constant';
     const AudioList = (props) => {
      const { getCurrentID, updateStep, addAudio, addCurretnAudio, clearSummary, addSummary, clearAll, addBasicDetails, addIntent, clearTranscript, addTranscript } = useAudioStore()
@@ -101,7 +100,7 @@
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
-        console.log('Polling stopped - stage is end');
+        console.log('Polling stopped - stage is end/failed');
       }
       return;
     }
@@ -250,7 +249,7 @@
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 hover:text-primary transition-colors duration-200">
-                          {user.label} <StatusSpan status={user.stage} />
+                          {user.label} 
 
                         </h3>
                         <p className="text-sm text-gray-500">Duration: {user.duration}</p>
