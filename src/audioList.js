@@ -11,7 +11,6 @@
         props.isData(a); // Calling the parent function and passing data
       };
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       const fetchUsers = async () => {
           try {
             setLoading(true);
@@ -36,10 +35,11 @@
             setLoading(false);
           }
         };
-         // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         useEffect(() => {
-           // eslint-disable-next-line
+        // eslint-disable-next-line
           fetchUsers();
+        // eslint-disable-next-line
         }, []);
 
         
