@@ -34,8 +34,8 @@ const progress = useMemo(() => ({
 
   const getStepStatus = (index) => {
     if (index < currentStep) return 'completed';
-    if (index === currentStep && defaultDetails.stage?.split('.')[1]=='fail') return 'failed';
-    if (index === currentStep  && defaultDetails.stage?.split('.')[1]=='end') return 'completed';
+    if (index === currentStep && defaultDetails.stage?.split('.')[1]==='fail') return 'failed';
+    if (index === currentStep  && defaultDetails.stage?.split('.')[1]==='end') return 'completed';
     if (index === currentStep) return 'running';
     return 'pending';
     
