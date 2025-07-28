@@ -13,8 +13,8 @@ const Summary = ({ summaryText = "" }) => {
       <style jsx>{`
         .summary-container {
           width: 99%;
-          height: 250px;
-          margin: 20px auto;
+          height: 535px;
+          margin: 5px auto;
           padding: 10px;
           border: 1px solid #ddd;
           border-radius: 8px;

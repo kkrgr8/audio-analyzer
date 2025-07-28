@@ -72,7 +72,7 @@ const BasicAudioPlayer = () => {
   const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div style={{ height: '200px' }} className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div style={{ height: '230px' }} className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
               <h2 className="audio-details-heading">Player</h2>
 
       <audio ref={audioRef} src={audioUrl} preload="metadata" />

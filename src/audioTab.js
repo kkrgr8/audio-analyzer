@@ -6,7 +6,7 @@ export default function TabsComponent() {
   const [activeTab, setActiveTab] = useState('transcript');
 
   return (
-    <div className="max-w-4xl max-h-96 bg-white border border-gray-200 rounded-lg shadow-sm" style={{ height: '600px' }}>
+    <div className="max-w-4xl max-h-100 bg-white border border-gray-200 rounded-lg shadow-sm" style={{ height: '600px' }}>
       {/* Tab Headers */}
       <div className="flex border-b border-gray-200">
         <button

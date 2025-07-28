@@ -9,6 +9,7 @@ import WelcomeComponent from './welcome';
 import useAudioStore from './store';
 import TabsComponent from './audioTab';
 import Header from './header'
+import SentimentPieChart from './graph';
 
 const FileUploadManager = () => {
   const cuurent_audio_id = useAudioStore(state => state.current_audio_id);
@@ -33,7 +34,7 @@ const FileUploadManager = () => {
         <div className="file-details-panel">
           <div className='audioProgress'><TranscriptionProgress/></div>
           <div className='audioPlayer'><BasicAudioPlayer/></div>
-          <div className='SecondRow'><div className="audioBasic" ><AudioBasic/></div>
+          <div className='SecondRow'><div className="audioBasic" ><AudioBasic/> <SentimentPieChart  /></div>
           <div className='audioSummaryConv'><TabsComponent/></div></div>
           
           

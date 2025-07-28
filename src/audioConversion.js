@@ -38,7 +38,7 @@ const totalSpeakers = conversationData ? [...new Set(conversationData.map(item =
       {/* Speaker Count Section */}
       <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
         <div className="text-center">
-          <span className="text-sm text-gray-600 mr-2">Number of Speakers:</span>
+          <span className="text-sm text-gray-600 mr-2">Speakers:</span>
           <span className="text-lg font-bold text-blue-600">{totalSpeakers}</span>
         </div>
       </div>
@@ -56,14 +56,15 @@ const totalSpeakers = conversationData ? [...new Set(conversationData.map(item =
                 
                 {/* Intent and Sentiment badges near speaker name */}
                 <div className="flex items-center space-x-2">
-                  <span title={item.intent.reasoning} className={`cursor-pointer
- intent-badge px-2 py-1 rounded-full text-xs font-medium border ${getIntentColor(item.intent.name)}`}>
-                    {item.intent.name}
+                  <span title={item.sentiment?.reasoning} className={`cursor-pointer
+ sentiment-badge px-2 py-1 rounded-full text-xs font-medium border ${getSentimentEmoji(item.sentiment?.label)}`}>
+                    {getSentimentEmoji(item.sentiment?.label).emoji}
                   </span>
-                  <span title={item.sentiment.reasoning} className={`cursor-pointer
- sentiment-badge px-2 py-1 rounded-full text-xs font-medium border ${getSentimentEmoji(item.sentiment.label)}`}>
-                    {item.sentiment.label}
+                  <span title={item.intent?.reasoning} className={`cursor-pointer
+ intent-badge px-2 py-1 rounded-full text-xs font-medium border ${getIntentColor(item.intent?.name)}`}>
+                    {item.intent?.name}
                   </span>
+                  
                 </div>
               </div>
               

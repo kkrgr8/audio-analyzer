@@ -7,8 +7,21 @@ const useAudioStore = create((set) => ({
   cuurent_intent:'Good',
   current_transcript:[],
   current_summary:null,
+  current_step:2,
 
   // Actions
+  clearStep: () => set((state) => ({
+    current_step:0
+  })),
+
+  getCurrentID: () => {
+    return useAudioStore.getState().current_audio_id;
+  },
+
+  updateStep: (step) => set((state) => ({
+    current_step:step
+  })),
+
   clearTranscript: () => set((state) => ({
     current_transcript:[]
   })),

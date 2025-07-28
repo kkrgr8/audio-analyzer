@@ -1,15 +1,34 @@
-    import { useState , useEffect} from 'react';
+    import { useState, useRef, useEffect, useMemo} from 'react';
     import useAudioStore from './store';
     import StatusSpan from './audioState';
     
     const AudioList = (props) => {
-     const { addAudio, addCurretnAudio, clearSummary, addSummary, clearAll, addBasicDetails, addIntent, clearTranscript, addTranscript } = useAudioStore()
-
+     const { getCurrentID, updateStep, addAudio, addCurretnAudio, clearSummary, addSummary, clearAll, addBasicDetails, addIntent, clearTranscript, addTranscript } = useAudioStore()
+      //const currentStep = useAudioStore(state => state.current_step);
       const audioArray = useAudioStore(state => state.audioArray)
         const [loading, setLoading] = useState(true);
         const handleClick = (a) => {
         props.isData(a); // Calling the parent function and passing data
       };
+
+        const intervalRef = useRef(null);
+
+      
+
+      const progress = useMemo(() => ({
+        'audio.upload': 2,
+        'transcript.start': 2,
+        'transcript.fail': 2,
+        'transcript.end': 2,
+        'analysis.start': 3,
+        'analysis.fail': 3,
+        'analysis.end': 4,
+        'summary.start': 4,
+        'summary.fail': 4,
+        'summary.end': 5
+      }), []); // Empty dependency since it's static
+
+
 
       const fetchUsers = async () => {
           try {
@@ -18,9 +37,12 @@
             clearAll();
             const response = await fetch("https://hack.purambokku.xyz/api/audios").then((res) => res.json())
             .then((data) => {
-              console.log(response);
             addAudio(data.audios);
             });
+            if (!response.ok) {
+      throw new Error("Failed to fetch audio details");
+    }
+    
            
           } catch (err) {
             console.log(err,'testing');
@@ -37,47 +59,81 @@
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
         useEffect(() => {
+      
         // eslint-disable-next-line
           fetchUsers();
         // eslint-disable-next-line
+            return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+        // eslint-disable-next-line
         }, []);
 
-        
+      const handleUserClick = async (audio_id) => {
+      if(audio_id === undefined){
+        audio_id = getCurrentID();
+      }
+  
+      addCurretnAudio(audio_id);
+  
+  // REMOVE THIS LINE - it's causing extra calls
+  // setTimeout(handleUserClick, 1000);
+  
+  try {
+    // Call API for user details
+    const response = await fetch(`https://hack.purambokku.xyz/api/audios/${audio_id}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch audio details");
+    }
+    
+    const userDetails = await response.json();
+    addBasicDetails(userDetails);
+    addIntent("Positive");
+    console.log("Audio details:", progress[userDetails.stage]);
+    updateStep(progress[userDetails.stage]);
+    clearTranscript();
+    fetchTranscriptId(audio_id, progress[userDetails.stage]);
+    
+    // Check if we should stop polling (add your condition here)
+    if (progress[userDetails.stage] === 5 || userDetails.stage?.split('.')[1]==='fail') {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        console.log('Polling stopped - stage is end');
+      }
+      return;
+    }
+    
+    // Start polling if not already started
+    if (!intervalRef.current) {
+      intervalRef.current = setInterval(() => {
+        handleUserClick(audio_id);
+      }, 10000);
+      console.log('Polling started');
+    }
+    
+  } catch (err) {
+    console.error("Error fetching user details:", err);
+    // Mock API call for demonstration
+    console.log(`Fetching details for user ID: ${audio_id}`);
+  }
+};
 
-        const handleUserClick = async (audio_id) => {
-          addCurretnAudio(audio_id)
-          try {
-            // Call API for user details
-            const response = await fetch(`https://hack.purambokku.xyz/api/audios/${audio_id}`);
-            if (!response.ok) {
-              throw new Error("Failed to fetch audio details");
-            }
-            const userDetails = await response.json();
-            addBasicDetails(userDetails);
-            addIntent("Positive")
-            console.log("Audio details:", userDetails);
-            clearTranscript()
-            fetchTranscriptId(audio_id)
-          } catch (err) {
-            console.error("Error fetching user details:", err);
-            // Mock API call for demonstration
-            console.log(`Fetching details for user ID: ${audio_id}`);
-          }
-          
-        };
-
-        const fetchTranscriptId = async (current_audio_id) => {
+        const fetchTranscriptId = async (current_audio_id,progress) => {
           try {
             clearTranscript();
             // Mock API call - replace with your actual API endpoint
           
             const response = await fetch("https://hack.purambokku.xyz/api/transcripts?aid="+current_audio_id).then((res) => res.json())
             .then((data) => {
-            console.log(response);
-            fetchTranscript(data.transcripts[0].transcript_id);
-            fetchSummary();
+            fetchTranscript(current_audio_id,data.transcripts[0].transcript_id,progress);
+            fetchSummary(current_audio_id);
             });
-            
+            if (!response.ok) {
+              throw new Error("Failed to fetch audio details");
+            }
            
           } catch (err) {
             
@@ -86,22 +142,29 @@
           }
         };
 
-        const fetchTranscript = async (transcript_id) => {
+        const fetchTranscript = async (current_audio_id,transcript_id,progress) => {
           try {
             clearTranscript();
-            // https://hack.purambokku.xyz/api/analysis0801558f827a41be9f1d3b77cad69392
-          
-            // const response = await fetch("https://hack.purambokku.xyz/api/transcripts/"+transcript_id).then((res) => res.json())
-            // .then((data) => {
-            // addTranscript(data?.segments);
-            // });
-
-             const response = await fetch("https://hack.purambokku.xyz/api/analysis0801558f827a41be9f1d3b77cad69392").then((res) => res.json())
-             .then((data) => {
-              console.log(response);
-             addTranscript(data?.segments);
+            if(progress===4 ||progress===5 ){
+              const response = await fetch("https://hack.purambokku.xyz/api/analysis?audio_id="+current_audio_id).then((res) => res.json())
+              .then((data) => {
+              //addTranscript(data?.segments);
+              fetchAnalyseData(data.analysis[0]?.analysis_id)
+              });
+              if (!response.ok) {
+                throw new Error("Failed to fetch audio details");
+              }
+            }else{
+              const response = await fetch("https://hack.purambokku.xyz/api/transcripts/"+transcript_id).then((res) => res.json())
+              .then((data) => {
+              addTranscript(data?.segments);
              });
-            
+
+              if (!response.ok) {
+                throw new Error("Failed to fetch audio details");
+              }
+            }
+             
            
           } catch (err) {
             
@@ -109,18 +172,37 @@
           } finally {
           }
         };
-
-        const fetchSummary = async (transcript_id="") => {
+        const fetchAnalyseData = async (analyse_id="") => {
+          try {
+            //clearSummary();
+            // Mock API call - replace with your actual API endpoint
+          
+            const response = await fetch("https://hack.purambokku.xyz/api/analysis/"+analyse_id).then((res) => res.json())
+            .then((data) => {
+            addTranscript(data?.segments);
+            });
+            if (!response.ok) {
+              throw new Error("Failed to fetch audio details");
+            }
+           
+          } catch (err) {
+            
+            
+          } finally {
+          }
+        };
+        const fetchSummary = async (current_audio_id="") => {
           try {
             clearSummary();
             // Mock API call - replace with your actual API endpoint
           
-            const response = await fetch("https://hack.purambokku.xyz/api/summaries7b36913a264343b6b37886121a0cf373").then((res) => res.json())
+            const response = await fetch("https://hack.purambokku.xyz/api/summaries?audio_id="+current_audio_id).then((res) => res.json())
             .then((data) => {
-              console.log(response);
-            addSummary(data?.summary);
+            addSummary(data?.summaries[0]?.summary);
             });
-            
+            if (!response.ok) {
+              throw new Error("Failed to fetch audio details");
+            }
            
           } catch (err) {
             
@@ -145,7 +227,7 @@
           <div className="min-h-screen bg-gray-50">
             <div className="">
               <div className="text-center">
-                <h6 className="text-4xl font-bold text-gray-900">
+                <h6 className="card-heading">
                   Recordings
                 </h6>
                 

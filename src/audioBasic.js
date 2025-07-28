@@ -45,7 +45,7 @@ const AudioBasic = () => {
           text-align: center;
           margin-bottom: 20px;
           color: #333;
-          font-size: 1.5em;
+          font-size: 1em;
           font-weight: bold;
           letter-spacing: 1px;
           border-bottom: 2px solid #007bff;
