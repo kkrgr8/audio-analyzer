@@ -23,7 +23,7 @@ const FileUploadManager = () => {
         {/* Left Side - File List */}
         <div className="file-list-panel">
           <div className="panel-header">
-            <h2 className="panel-title">Upload your Recording</h2>
+            <h2 className="panel-title">Upload your Recordings</h2>
             <AudioUploader/>
           </div>
           <AudioList/>
