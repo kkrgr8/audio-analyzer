@@ -31,6 +31,7 @@ const BasicAudioPlayer = () => {
     };
 
     if (audio) {
+      // Keep audio event listeners scoped to this component instance.
       audio.addEventListener('loadedmetadata', setAudioData);
       audio.addEventListener('timeupdate', setAudioTime);
       audio.addEventListener('ended', handleEnded);
